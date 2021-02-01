@@ -236,6 +236,7 @@ Register account involves the following
 
 * Create initial account to receive funds
 * (maybe *local account* is wrong name)
+
 ### NewAddress
 ![NewAddress](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/NewAddress.png> "NewAddress")
 
@@ -251,8 +252,16 @@ Register account involves the following
 
 ---
 
-### RecoverFromContactAndRecovery
-![RecoverFromContactAndRecovery](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RecoverFromContactAndRecovery.png> "RecoverFromContactAndRecovery")
+### RecoverAndSweepToNew
+![RecoverAndSweepToNew](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RecoverAndSweepToNew.png> "RecoverAndSweepToNew")
+
+**Description**
+
+* obtain recovery keypair and recover the old account map from 2 Decks
+* setup APP/container with one keypair each
+* have container iterate over UTXOs
+* group them and ask APP to sign
+* container countersign, finalise and broadcast
 
 ---
 
