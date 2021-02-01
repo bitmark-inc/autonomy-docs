@@ -93,6 +93,36 @@ Missing and bottlenecks
 [API on Postman](<https://documenter.getpostman.com/view/59304/TVYGbxbg> "API on Postman")
 
 ## BACKLOG
+
+* Order of XPUBs for multisig (choose 1)
+    1. original fixed order: `multi(platform,recovery,gordian)`
+    2. use: `sortedmulti` - this may simplify recovery
+
+* Network Switching
+    * provisioning: one keypair file and both networks derived from it
+    * figure out startup sequence: 2× CreatePersonalAccount for test/main
+    * wallet files multiple per network
+    * API for APP to reboot to other network
+
+* Recovery support only:
+    * recovery from loss of application or loss of container
+    * recover old funds to new account
+    * retain old wallet files for bitcoind monitoring
+    * _future:_ "crontab" to periodically sweep any new funds to old wallet
+    * _option:_ display remaining two keys as QR for external recovery
+
+* **Diagram Fixes**
+    * only delete device shards when backup is complete
+    * balance>B or activity>A or elapsed>T ask for backup
+    * how to reconstruct Bitmark relationship
+        * currently via email
+        * simple OTP
+        * get back Bitmark Deck
+        * need to have unencrypted contact info (perhaps only a name)
+        * **need to check sequence diagram, possible update required**
+
+## Future Versions
+
 * Android Java libwally @moskovich
     * some of the values end up going through strings
     * make sure that the strings are zeroed out
@@ -107,7 +137,7 @@ Missing and bottlenecks
     * joint account A & B each are 2of3
     * shard of recovery/identity is 2of3 or 3of5 or 4of9
     * BTC 2of3 +1(timelock: one year) so the fund is single sig after one year. TRADEOFF: make recovery key as the +1(timelock)
-    * fixed order: `multi(platform,recovery,gordian)` or use `sortedmulti`?`
+    * fixed order: `multi(platform,recovery,gordian)` or use `sortedmulti`?
 * Ed25519
     * lots of compatibility problems
     * different encodings of priv/pub
@@ -138,15 +168,6 @@ Missing and bottlenecks
     * unconfirmed balance
     * how to handle balance=0 e.g. unconfirmed balance in *change*
 
-* **Diagram Fixes**
-    * only delete device shards when backup is complete
-    * balance>B or activity>A or elapsed>T ask for backup
-    * how to reconstruct Bitmark relationship
-        * currently via email
-        * simple OTP
-        * get back Bitmark Deck
-        * need to have unencrypted contact info (perhaps only a name)
-        * **need to check sequence diagram, possible update required**
 * [application](<https://hackmd.io/BnNeWeaHRuKZGd5ywScbVw?view>)
 
 
