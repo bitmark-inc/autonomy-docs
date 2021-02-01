@@ -8,9 +8,12 @@ tags: Autonomy-System, API, MVA
 :::spoiler {state=open} CONTENTS
 [TOC]
 :::
+
+
 ## Milestones
 
 ### Release v1.0 (2-MAR 2021)
+
 - App
     - iOS (iPhone only)
 - Server (partially isolated user processes)
@@ -22,6 +25,7 @@ Missing and bottlenecks
 - TBD
 
 ### Release v1.5 (Q2 2021)
+
 - App
     - Android
 - Server
@@ -30,6 +34,7 @@ Missing and bottlenecks
     - Transaction scheduling
 
 ### Release v2.0 (Q4 2021)
+
 - App
     - TBD
 - Server
@@ -276,6 +281,11 @@ Register account involves the following
 ---
 
 ### CreateSharedAccount
+
+:::warning
+Future Feature
+:::
+
 ![CreateSharedAccount](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CreateSharedAccount.png> "CreateSharedAccount")
 
 ---
@@ -300,9 +310,11 @@ Under Construction
 ## Application architecture
 
 ### 1. Block diagrams
+
 ![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
 
 ### 2. Account/Keys management
+
 * Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compabilities with Gordian System.
 * Recovery and platform cosigner keypairs are generated independently from Application's process.
     * Recovery cosigner keypair will be sharded immediately after generated, and its key storage will just store shards.
@@ -312,6 +324,7 @@ Under Construction
     * After generated, its 3 shards will be stored along with Recovery cosigner keypair's shards.
 
 ### 3. Local database
+
 Uses [Core data](https://developer.apple.com/documentation/coredata) to persist all kinds of data not related to keys, includes:
 * `Address` stores joint BTC addresses and their derivation paths.
 * `Activity`, `Contact` and `Settings` store business logic data of activities, contacts and app settings.
