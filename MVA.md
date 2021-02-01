@@ -154,7 +154,7 @@ Missing and bottlenecks
 
 
 ### Container
-![Container](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/block/server/Container.png> "Container")
+![Container](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/Container.png> "Container")
 
 **Description**
 
@@ -186,12 +186,12 @@ The system consists of the following components:
 ## Sequence Diagrams
 
 ### Overview
-![Overview](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Overview.png> "Overview")
+![Overview](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Overview.png> "Overview")
 
 ---
 
 ### Registration
-![Registration](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Registration.png> "Registration")
+![Registration](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Registration.png> "Registration")
 
 **Description**
 
@@ -209,51 +209,51 @@ Register account involves the following
 ---
 
 ### CreatePersonalAccount
-![CreatePersonalAccount](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/CreatePersonalAccount.png> "CreatePersonalAccount")
+![CreatePersonalAccount](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CreatePersonalAccount.png> "CreatePersonalAccount")
 
 **Description**
 
 * Create initial account to receive funds
 * (maybe *local account* is wrong name)
 ### NewAddress
-![NewAddress](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/NewAddress.png> "NewAddress")
+![NewAddress](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/NewAddress.png> "NewAddress")
 
 ---
 
 ### Payment
-![Payment](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Payment.png> "Payment")
+![Payment](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Payment.png> "Payment")
 
 ---
 
 ### ReceiveFunds
-![ReceiveFunds](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/ReceiveFunds.png> "ReceiveFunds")
+![ReceiveFunds](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ReceiveFunds.png> "ReceiveFunds")
 
 ---
 
 ### RecoverFromContactAndRecovery
-![RecoverFromContactAndRecovery](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/RecoverFromContactAndRecovery.png> "RecoverFromContactAndRecovery")
+![RecoverFromContactAndRecovery](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RecoverFromContactAndRecovery.png> "RecoverFromContactAndRecovery")
 
 ---
 
 ### AddContact
-![AddContact](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/AddContact.png> "AddContact")
+![AddContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/AddContact.png> "AddContact")
 
 ---
 
 ### BackupToContact
-![BackupToContact](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/BackupToContact.png> "BackupToContact")
+![BackupToContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/BackupToContact.png> "BackupToContact")
 
 ---
 
 ### CreateSharedAccount
-![CreateSharedAccount](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/CreateSharedAccount.png> "CreateSharedAccount")
+![CreateSharedAccount](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CreateSharedAccount.png> "CreateSharedAccount")
 
 ---
 
 ## Classes
 
 ### SystemClasses
-![SystemClasses](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/class/server/SystemClasses.png> "SystemClasses")
+![SystemClasses](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/class/server/SystemClasses.png> "SystemClasses")
 
 
 ---
@@ -414,7 +414,7 @@ end
 ## Appendix
 
 ### Container-AWS-Keys
-![Container-AWS-Keys](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Container-AWS-Keys.png> "Container-AWS-Keys")
+![Container-AWS-Keys](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Container-AWS-Keys.png> "Container-AWS-Keys")
 
 **Description**
 
