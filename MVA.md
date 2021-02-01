@@ -18,7 +18,7 @@ tags: Autonomy-System, API, MVA
     - Access Recovery
     - Contact list
 
-Missing and bottlenecks 
+Missing and bottlenecks
 - TBD
 
 ### Release v1.5 (Q2 2021)
@@ -34,7 +34,7 @@ Missing and bottlenecks
     - TBD
 - Server
     - Automated trading
-    - Custom policies 
+    - Custom policies
     - TorGap messaging
 
 
@@ -80,7 +80,7 @@ Missing and bottlenecks
 * then use the remaining key platform or gordian to sweeep the funds to a new wallet
 * extra second protection is to add an additional key wit on year time lock
     * if recovery key is used then the case of bot platform and container store lost is covered if sufficient shards are recovered
- 
+
 ## Connections to other services
 
 * spotbit - current price information
@@ -93,7 +93,7 @@ Missing and bottlenecks
 [API on Postman](<https://documenter.getpostman.com/view/59304/TVYGbxbg> "API on Postman")
 
 ## BACKLOG
-* Android Java libwally @moskovich 
+* Android Java libwally @moskovich
     * some of the values end up going through strings
     * make sure that the strings are zeroed out
     * strings are variable size and need careful consideration
@@ -101,7 +101,7 @@ Missing and bottlenecks
     * maybe 2 mandays of high-level Java expert
 * messaging
     * currently - Bitmark-run central whisper message queue
-    * 
+    *
 * 2of3 (keys and shards)
     * BTC 2of3
     * joint account A & B each are 2of3
@@ -152,8 +152,9 @@ Missing and bottlenecks
 
 ## Block Diagrams
 
+
 ### Container
-![Container](<https://repo.bitmark.com/files/vpp/Container.png> "Container")
+![Container](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/block/server/Container.png> "Container")
 
 **Description**
 
@@ -185,12 +186,12 @@ The system consists of the following components:
 ## Sequence Diagrams
 
 ### Overview
-![Overview](<https://repo.bitmark.com/files/vpp/Overview.png> "Overview")
+![Overview](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Overview.png> "Overview")
 
 ---
 
 ### Registration
-![Registration](<https://repo.bitmark.com/files/vpp/Registration.png> "Registration")
+![Registration](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Registration.png> "Registration")
 
 **Description**
 
@@ -208,51 +209,51 @@ Register account involves the following
 ---
 
 ### CreatePersonalAccount
-![CreatePersonalAccount](<https://repo.bitmark.com/files/vpp/CreatePersonalAccount.png> "CreatePersonalAccount")
+![CreatePersonalAccount](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/CreatePersonalAccount.png> "CreatePersonalAccount")
 
 **Description**
 
 * Create initial account to receive funds
 * (maybe *local account* is wrong name)
 ### NewAddress
-![NewAddress](<https://repo.bitmark.com/files/vpp/NewAddress.png> "NewAddress")
+![NewAddress](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/NewAddress.png> "NewAddress")
 
 ---
 
 ### Payment
-![Payment](<https://repo.bitmark.com/files/vpp/Payment.png> "Payment")
+![Payment](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Payment.png> "Payment")
 
 ---
 
 ### ReceiveFunds
-![ReceiveFunds](<https://repo.bitmark.com/files/vpp/ReceiveFunds.png> "ReceiveFunds")
+![ReceiveFunds](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/ReceiveFunds.png> "ReceiveFunds")
 
 ---
 
 ### RecoverFromContactAndRecovery
-![RecoverFromContactAndRecovery](<https://repo.bitmark.com/files/vpp/RecoverFromContactAndRecovery.png> "RecoverFromContactAndRecovery")
+![RecoverFromContactAndRecovery](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/RecoverFromContactAndRecovery.png> "RecoverFromContactAndRecovery")
 
 ---
 
 ### AddContact
-![AddContact](<https://repo.bitmark.com/files/vpp/AddContact.png> "AddContact")
+![AddContact](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/AddContact.png> "AddContact")
 
 ---
 
 ### BackupToContact
-![BackupToContact](<https://repo.bitmark.com/files/vpp/BackupToContact.png> "BackupToContact")
+![BackupToContact](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/BackupToContact.png> "BackupToContact")
 
 ---
 
 ### CreateSharedAccount
-![CreateSharedAccount](<https://repo.bitmark.com/files/vpp/CreateSharedAccount.png> "CreateSharedAccount")
+![CreateSharedAccount](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/CreateSharedAccount.png> "CreateSharedAccount")
 
 ---
 
 ## Classes
 
 ### SystemClasses
-![SystemClasses](<https://repo.bitmark.com/files/vpp/SystemClasses.png> "SystemClasses")
+![SystemClasses](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/class/server/SystemClasses.png> "SystemClasses")
 
 
 ---
@@ -291,7 +292,7 @@ Under Construction
 
 ### 2. Local database
 Uses [Core data](https://developer.apple.com/documentation/coredata) to persist all kinds of data not related to keys, includes:
-* `Address` stores derived indexes and chain types. 
+* `Address` stores derived indexes and chain types.
 * `Activity`, `Contact` and `Settings` store business logic data of activities, contacts and app settings.
 * All `Signal*` store signal messaging's related information and required stores from signal protocol.
 > [name=Anh Nguyen] Will support multiple accounts.
@@ -305,7 +306,7 @@ sequenceDiagram
     participant HDKey(Server)
     participant Server
     participant Bitcoind
-    
+
 activate Mobile
 rect rgb(0, 255, 0, .1)
     Note over Mobile,Server: Register the wallet
@@ -334,7 +335,7 @@ sequenceDiagram
     participant HDKey(Server)
     participant Server
     participant Bitcoind
-     
+
  activate Mobile
  rect rgb(0, 255, 0, .1)
     Note over Mobile, HDKey(Server): Derive for a 2-of-2 multisig address
@@ -364,7 +365,7 @@ sequenceDiagram
     participant HDKey(Server)
     participant Server
     participant Bitcoind
-     
+
  activate Mobile
  rect rgb(0, 255, 0, .1)
     Note over Mobile, Server: Import the address to server and watch for incoming transactions
@@ -413,7 +414,7 @@ end
 ## Appendix
 
 ### Container-AWS-Keys
-![Container-AWS-Keys](<https://repo.bitmark.com/files/vpp/Container-AWS-Keys.png> "Container-AWS-Keys")
+![Container-AWS-Keys](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/sequence/server/Container-AWS-Keys.png> "Container-AWS-Keys")
 
 **Description**
 
@@ -459,5 +460,3 @@ end
 
 ---
 ---
-
-
