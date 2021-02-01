@@ -266,7 +266,7 @@ Under Construction
 --
 ## Application architect (obsolete - updating)
 ### Block diagrams
-![Application](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/block/application/AppArchitecture.png> "Payment")
+![Application](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/AppArchitecture.png> "Payment")
 
 ### 1. Account/Keys management
 * Similar to Gordian wallet iOS app for generating bitcoin private keys:
