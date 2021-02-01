@@ -265,6 +265,9 @@ Under Construction
 
 --
 ## Application architect (obsolete - updating)
+### Block diagrams
+![Application](<https://github.com/bitmark-inc/autonomy-docs/blob/master/images/block/application/AppArchitecture.png> "Payment")
+
 ### 1. Account/Keys management
 * Similar to Gordian wallet iOS app for generating bitcoin private keys:
     * Uses [secure random generator API](https://developer.apple.com/documentation/security/1399291-secrandomcopybytes) to generate 16 bytes of secure entrophy.
