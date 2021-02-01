@@ -153,8 +153,8 @@ Missing and bottlenecks
 ## Block Diagrams
 
 
-### Container
-![Container](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/Container.png> "Container")
+### Container Architecture
+![ContainerArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/ContainerArchitecture.png> "ContainerArchitecture")
 
 **Description**
 
@@ -257,16 +257,20 @@ Register account involves the following
 
 
 ---
+
 ## still to be updated
 
 :::warning
 Under Construction
 :::
 
---
+---
+
+
 ## Application architect (obsolete - updating)
+
 ### Block diagrams
-![Application](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/ApplicationArchitecture.png> "Application")
+![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
 
 ### 1. Account/Keys management
 * Similar to Gordian wallet iOS app for generating bitcoin private keys:
@@ -276,7 +280,7 @@ Under Construction
     * Uses BIP-44 result to start the hierarchy of BTC wallets and BTC addresses.
     * Generate a random 32 bytes and store in iOS Keychain for encryption
     * Uses BIP-39 to get the mnemonic 12-word-phrase, encrypt with Chacha20-Poly1305 uses 32 bytes above, and store to iOS Keychain.
-> [name=Anh Nguyen] Updating Keys management to [latest module from Godian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers).
+> [name=Anh Nguyen] Updating Keys management to [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers).
 > Will support multiple accounts (or [profiles](https://docs.google.com/document/d/1FXCxVUFwGh4I-pXx9Oxec_9Qanq1fq9XSQvno6QJBI0/edit#heading=h.5rgvyjnctzyr)) in a device.
 * BTC wallets derivation:
     * Multi-sig wallet:
