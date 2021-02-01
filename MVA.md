@@ -267,156 +267,25 @@ Under Construction
 ---
 
 
-## Application architect (obsolete - updating)
+## Application architecture
 
-### Block diagrams
+### 1. Block diagrams
 ![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
 
-### 1. Account/Keys management
-* Similar to Gordian wallet iOS app for generating bitcoin private keys:
-    * Uses [secure random generator API](https://developer.apple.com/documentation/security/1399291-secrandomcopybytes) to generate 16 bytes of secure entrophy.
-    * Uses 16 bytes secure entrophy as input of Libwally's BIP-32.
-    * Uses BIP-32 result as input of Libwally's BIP-44.
-    * Uses BIP-44 result to start the hierarchy of BTC wallets and BTC addresses.
-    * Generate a random 32 bytes and store in iOS Keychain for encryption
-    * Uses BIP-39 to get the mnemonic 12-word-phrase, encrypt with Chacha20-Poly1305 uses 32 bytes above, and store to iOS Keychain.
-> [name=Anh Nguyen] Updating Keys management to [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers).
-> Will support multiple accounts (or [profiles](https://docs.google.com/document/d/1FXCxVUFwGh4I-pXx9Oxec_9Qanq1fq9XSQvno6QJBI0/edit#heading=h.5rgvyjnctzyr)) in a device.
-* BTC wallets derivation:
-    * Multi-sig wallet:
-        * Server's xpub and xpriv derivation path: `m/0'/0'/0'`
-        * Client's xpub and xpriv derivation path: `m/0'/0'/1'`
-        * After initialized, the app sends server's xpriv to server for co-signing and finalizing PSBTs.
-    * Derive for an address:
-        * Continue derives server's xpub and client's xpub with `/0/{index}` for external chain and `/1/{index}` for internal chain.
-        * Combines server publickey and client's public key to construct a multisig address with threshold of 2.
-        * Uses BIP67 for sorting public keys.
-        * Compose descriptors and import to bitcoind.
-    * Server authentication's private key: `m/0'/0'/2`
-        * Uses private key as input of [ECDSA's P256 signing key](https://developer.apple.com/documentation/cryptokit/p256/signing/privatekey).
-        * Submit public key in raw representation and signature to server for authentication.
-> [name=Anh Nguyen] Reviewing derivation paths with new MVA.
+### 2. Account/Keys management
+* Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compabilities with Gordian System.
+* Recovery and platform cosigner keypairs are generated independently from Application's process.
+    * Recovery cosigner keypair will be sharded immediately after generated, and its key storage will just store shards.
+    * Platform cosigner keypair keeps its privatekey separated from Application, only receive PSBT and sign.
+    * Signal protocol's account identity is derived from Platform cosigner keypair. Recovery won't recover signal identity.
+* Identity keypair are generated in Application process.
+    * After generated, its 3 shards will be stored along with Recovery cosigner keypair's shards.
 
-### 2. Local database
+### 3. Local database
 Uses [Core data](https://developer.apple.com/documentation/coredata) to persist all kinds of data not related to keys, includes:
-* `Address` stores derived indexes and chain types.
+* `Address` stores joint BTC addresses and their derivation paths.
 * `Activity`, `Contact` and `Settings` store business logic data of activities, contacts and app settings.
 * All `Signal*` store signal messaging's related information and required stores from signal protocol.
-> [name=Anh Nguyen] Will support multiple accounts.
-
-### 3. Autonomy iOS Sequence diagrams
-#### Wallet creation
-```mermaid
-sequenceDiagram
-    participant Mobile
-    participant HDKey(Client)
-    participant HDKey(Server)
-    participant Server
-    participant Bitcoind
-
-activate Mobile
-rect rgb(0, 255, 0, .1)
-    Note over Mobile,Server: Register the wallet
-    Mobile->>+Server: Derive seed with m/0'/0'/2' and send public key
-    Server->>Server: Create a wallet with public key
-    Server-->>-Mobile: OK
-end
-rect rgb(0, 255, 0, .2)
-    Note over Mobile,Server: Derive master keys and send server's key to server
-    Mobile->>+HDKey(Client): Derive seed with m/0'/0'/1'
-    HDKey(Client)-->>-Mobile: OK
-    Mobile->>+HDKey(Server): Derive seed with m/0'/0'/0'
-    HDKey(Server)->>+Server: Send master private key
-    Server-->>-HDKey(Server): OK
-    HDKey(Server)->>HDKey(Server): Remove master private key from memory
-    HDKey(Server)-->>-Mobile: OK
-end
- deactivate Mobile
-```
-
-#### External address registration
-```mermaid
-sequenceDiagram
-    participant Mobile
-    participant HDKey(Client)
-    participant HDKey(Server)
-    participant Server
-    participant Bitcoind
-
- activate Mobile
- rect rgb(0, 255, 0, .1)
-    Note over Mobile, HDKey(Server): Derive for a 2-of-2 multisig address
-    Mobile->>Mobile: Determine for a derivation path
-    Mobile->>+HDKey(Client): Ask for xpub derivation with path
-    HDKey(Client)-->>-Mobile: Public key
-    Mobile->>+HDKey(Server): Ask for xpub derivation with path
-    HDKey(Server)-->>-Mobile: Public key
-    Mobile->>Mobile: Combine public keys and construct an address
-end
-rect rgb(0, 255, 0, .2)
-    Note over Mobile, Bitcoind: Import the address to server and watch for incoming transactions
-    Mobile->>Mobile: Construct the descriptor
-    Mobile->>+Server: Import descriptor to the wallet
-    Server->>+Bitcoind: Watch for incoming txs
-    Bitcoind-->>-Server: OK
-    Server-->>-Mobile: OK
-end
- deactivate Mobile
-```
-
-#### Make a transaction
-```mermaid
-sequenceDiagram
-    participant Mobile
-    participant HDKey(Client)
-    participant HDKey(Server)
-    participant Server
-    participant Bitcoind
-
- activate Mobile
- rect rgb(0, 255, 0, .1)
-    Note over Mobile, Server: Import the address to server and watch for incoming transactions
-    Mobile->>Mobile: Determine for a derivation path for change address
-    Mobile->>+HDKey(Client): Ask for xpub derivation with path
-    HDKey(Client)-->>-Mobile: Public key
-    Mobile->>+HDKey(Server): Ask for xpub derivation with path
-    HDKey(Server)-->>-Mobile: Public key
-    Mobile->>Mobile: Combine public keys and construct a change address
-    Mobile->>Mobile: Construct the descriptor
-    Mobile->>+Server: Import descriptor to the wallet
-    Server-->>-Mobile: OK
-end
- rect rgb(0, 255, 0, .2)
-    Note over Mobile, Bitcoind: Create, sign, finalize and broadcast a PSBT transaction
-    Mobile->>+Server: Send receipient and change address
-    Server->>+Bitcoind: Ask for a PSBT transaction body.
-    Bitcoind->>Bitcoind: Gather UXTOs, calculate fee and change amount.
-    Bitcoind-->>-Server: PSBT transaction.
-    Server-->>-Mobile: PSBT transaction.
-    Mobile->>+HDKey(Client): Ask for signing PSBT
-    HDKey(Client)-->>-Mobile: 1-of-2 signed PSBT
-    Mobile->>+Server: Send 1-of-2 signed PSBT
-    Server->>Server: Sign PSBT with private key sent from client.
-    Server->>Server: Finalize PSBT
-    Server->>+Bitcoind: Broadcast transaction.
-    Bitcoind-->>-Server: OK
-    Server-->>-Mobile: OK
-end
- deactivate Mobile
-```
-
-### 4. Messaging
-* Uses [signal protocol](https://signal.org/docs/) to secure end-to-end encryption messaging.
-* Two types of messaging account in app:
-    * Seed's messaging account:
-        * Is derived with a special path from the wallet.
-        * Identity keypair is generated locally and stored on iOS Keychain.
-        * All data, include identity keypair will be gone when user log out. Account recovery replaces signal key and data with new ones, and registers new identity to signal server.
-        * App checks with signal server frequently for current pool of prekeys, replenish keys if needed
-    * App's messaging account:
-        * All signal protocol stores are in-memory store, will be gone when the app gets killed.
-        * For Recovery when seed's messaging account could not be determined yet.
-        * For submiting events for analytics.
 
 ## Appendix
 
