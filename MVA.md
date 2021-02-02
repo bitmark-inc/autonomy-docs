@@ -88,14 +88,9 @@ tags: Autonomy-System, API, MVA
     * Will the APP use same contact list for both networks?
     * RESEARCH: Need to add to gordian server and all-bitcoin-core 21+ to regtest and signet, signet schnorr ($10K changes to server, $5K changes to wallet to support 3+ networks, and $20K for initial schnorr)
 
-* Recover or Reconstruct
-    * RECONSTRUCT - get old keys back, use them again, assumes no compromise
-    * RECOVERY - compromise of one key is assumed, thus use remaining keys to sweep to new Account Map multisig.
-    * recover from loss of application or loss of container
-    * recover old funds to new account (forma)
-    * retain old wallet files for bitcoind monitoring
-    * _future:_ "crontab" to periodically sweep any new funds to old wallet
-    * _option:_ display remaining two keys as QR for external recovery
+* Reconstruct
+    * get old keys back: platform and container still usable
+    * assumes no compromise
 
 * Add Contact:
     * User coordinator server?
@@ -179,6 +174,8 @@ Register account involves the following
 
 * Create initial account to receive funds
 * (maybe *local account* is wrong name)
+* derives multisig addresses using `sortedmulti`
+* relies on saved accountmap to recover xpubs
 
 ### NewAddress
 ![NewAddress](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/NewAddress.png> "NewAddress")
@@ -280,6 +277,13 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to persist 
     * strings are variable size and need careful consideration
     * what for string copies
     * maybe 2 mandays of high-level Java expert
+* Recover
+    * RECOVERY - compromise of one key is assumed, thus use remaining keys to sweep to new Account Map multisig.
+    * recover from loss of application or loss of container
+    * recover old funds to new account (forma)
+    * retain old wallet files for bitcoind monitoring
+    * _future:_ "crontab" to periodically sweep any new funds to old wallet
+    * _option:_ display remaining two keys as QR for external recovery
 * Messaging
     * currently - Bitmark-run central whisper message queue
     * Signal messaging is currenly only sihgle-sig, with all its disadvantages.
