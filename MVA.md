@@ -173,8 +173,10 @@ Register account involves the following
 **Description**
 
 * Create initial account to receive funds
-* (maybe *local account* is wrong name)
-* derives multisig addresses using `sortedmulti`
+* derives multisig addresses using `wsh(sortedmulti(2,P,R,G))`
+* external path: `m/84h/0h/0h/0/*`
+* internal path: `m/84h/0h/0h/1/*`
+* see [BIP 84](<https://github.com/bitcoin/bips/blob/master/bip-0084.mediawiki>)
 * relies on saved accountmap to recover xpubs
 
 ### NewAddress
