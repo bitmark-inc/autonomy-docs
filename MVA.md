@@ -5,42 +5,19 @@ tags: Autonomy-System, API, MVA
 
 # **Autonomy Minimum Viable Architecture (MVA)**
 
-:::spoiler {state=open} CONTENTS
-[TOC]
-:::
-
-
-## Milestones
-
-### Release v1.0 (2-MAR 2021)
-
+**v1.0 Release Date: 2-MAR 2021**
 - App
     - iOS (iPhone only)
 - Server (partially isolated user processes)
-    - Transaction Coordinator
-    - Access Recovery
+    - Basic transaction coordinator
+    - Recovery
     - Contact list
 
-Missing and bottlenecks
-- TBD
+---
 
-### Release v1.5 (Q2 2021)
-
-- App
-    - Android
-- Server
-    - Policy Coordinator
-    - Account policies
-    - Transaction scheduling
-
-### Release v2.0 (Q4 2021)
-
-- App
-    - TBD
-- Server
-    - Automated trading
-    - Custom policies
-    - TorGap messaging
+:::spoiler {state=open} CONTENTS
+[TOC]
+:::
 
 
 ## Keys
@@ -95,7 +72,7 @@ Missing and bottlenecks
 
 ## Postman Documentation
 
-[API on Postman](<https://documenter.getpostman.com/view/59304/TVYGbxbg> "API on Postman")
+[Autonomy API](<https://documenter.getpostman.com/view/59304/TVYGbxbg> "API on Postman")
 
 ## BACKLOG
 
@@ -108,13 +85,23 @@ Missing and bottlenecks
     * figure out startup sequence: 2× CreatePersonalAccount for test/main
     * wallet files multiple per network
     * API for APP to reboot to other network
+    * Will the APP use same contact list for both networks?
+    * RESEARCH: Need to add to gordian server and all-bitcoin-core 21+ to regtest and signet, signet schnorr ($10K changes to server, $5K changes to wallet to support 3+ networks, and $20K for initial schnorr)
 
-* Recovery support only:
-    * recovery from loss of application or loss of container
-    * recover old funds to new account
+* Recover or Reconstruct
+    * RECONSTRUCT - get old keys back, use them again, assumes no compromise
+    * RECOVERY - compromise of one key is assumed, thus use remaining keys to sweep to new Account Map multisig.
+    * recover from loss of application or loss of container
+    * recover old funds to new account (forma)
     * retain old wallet files for bitcoind monitoring
     * _future:_ "crontab" to periodically sweep any new funds to old wallet
     * _option:_ display remaining two keys as QR for external recovery
+
+* Add Contact:
+    * User coordinator server?
+    * Understand QR as bearer token
+    * contact list also in container
+
 
 * **Diagram Fixes**
     * only delete device shards when backup is complete
@@ -125,55 +112,6 @@ Missing and bottlenecks
         * get back Bitmark Deck
         * need to have unencrypted contact info (perhaps only a name)
         * **need to check sequence diagram, possible update required**
-
-## Future Versions
-
-* Android Java libwally @moskovich
-    * some of the values end up going through strings
-    * make sure that the strings are zeroed out
-    * strings are variable size and need careful consideration
-    * what for string copies
-    * maybe 2 mandays of high-level Java expert
-* messaging
-    * currently - Bitmark-run central whisper message queue
-    *
-* 2of3 (keys and shards)
-    * BTC 2of3
-    * joint account A & B each are 2of3
-    * shard of recovery/identity is 2of3 or 3of5 or 4of9
-    * BTC 2of3 +1(timelock: one year) so the fund is single sig after one year. TRADEOFF: make recovery key as the +1(timelock)
-    * fixed order: `multi(platform,recovery,gordian)` or use `sortedmulti`?
-* Ed25519
-    * lots of compatibility problems
-    * different encodings of priv/pub
-    * different privatekey e.d. random, hash()
-    * different signature encodings
-    * [https://gist.github.com/gorazdko/5fbe819b80e780a1894086b5731bb32d](<https://gist.github.com/gorazdko/5fbe819b80e780a1894086b5731bb32d>)
-    * [Ristretto](<https://ristretto.group/ristretto.html>) solves the multisig problem (solves bitmarkd 2 sig transfer). Can use Schnorr with this
-* price information where is it from, how to validate
-    * spotbit service
-    * fee estimation service
-* secure MVP
-    * signal versus onion
-    * minimum necessary understanding of Tor for container communication
-    * what problems might Tor cause
-* multisig transaction coordinator
-    * need more understanding
-    * Schnorr sig (0.22? Q3 perhaps) (0.21 regtest testnet?)
-    * will this increase message sizes too much
-* invoicing and purchase orders
-* sweep to new addresses under my own control
-    * not necessarily close the wallet
-* fiat work on UX
-* fees
-    * fees e.g., one dollar tx with N! dollar fee
-    * whathefee.io  fee estimator, but confusing, maybe 3x3 matrix. Better than fast/slow-low/high
-    * fee replacement, could UX have *add more fee button*
-* cpfp
-    * unconfirmed balance
-    * how to handle balance=0 e.g. unconfirmed balance in *change*
-
-* [application](<https://hackmd.io/BnNeWeaHRuKZGd5ywScbVw?view>)
 
 
 ## Block Diagrams
@@ -265,7 +203,7 @@ Register account involves the following
 * obtain recovery keypair and recover the old account map from 2 Decks
 * setup APP/container with one keypair each
 * have container iterate over UTXOs
-* group them and ask APP to sign
+* group resulting UTXOs into transactions and ask APP to sign them
 * container countersign, finalise and broadcast
 
 ---
@@ -318,7 +256,7 @@ Under Construction
 * Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compabilities with Gordian System.
 * Recovery and platform cosigner keypairs are generated independently from Application's process.
     * Recovery cosigner keypair will be sharded immediately after generated, and its key storage will just store shards.
-    * Platform cosigner keypair keeps its privatekey separated from Application, only receive PSBT and sign.
+    * Platform cosigner keypair keeps its privatekey separated from Application, only receive PSBTs and sign them.
     * Signal protocol's account identity is derived from Platform cosigner keypair. Recovery won't recover signal identity.
 * Identity keypair are generated in Application process.
     * After generated, its 3 shards will be stored along with Recovery cosigner keypair's shards.
@@ -326,9 +264,68 @@ Under Construction
 ### 3. Local database
 
 Uses [Core data](https://developer.apple.com/documentation/coredata) to persist all kinds of data not related to keys, includes:
-* `Address` stores joint BTC addresses and their derivation paths.
+* `Address` stores multisig BTC addresses and their derivation paths.
 * `Activity`, `Contact` and `Settings` store business logic data of activities, contacts and app settings.
 * All `Signal*` store signal messaging's related information and required stores from signal protocol.
+
+## Metadata
+
+*TODO: Need to define our metadata.*
+
+## Future Work (post-MVA)
+
+* Android Java libwally @moskovich
+    * some of the values end up going through strings
+    * make sure that the strings are zeroed out
+    * strings are variable size and need careful consideration
+    * what for string copies
+    * maybe 2 mandays of high-level Java expert
+* Messaging
+    * currently - Bitmark-run central whisper message queue
+    * Signal messaging is currenly only sihgle-sig, with all its disadvantages.
+    * messaging uses a key as an identifier. How do we restore or recover or revoke without real decentralized identifier rotation features.
+* 2of3 (keys and shards)
+    * BTC 2of3
+    * joint account A & B each are 2of3
+    * shard of recovery/identity is 2of3 or 3of5 or 4of9
+    * BTC 2of3 +1(timelock: one year) so the fund is single sig after one year. TRADEOFF: make recovery key as the +1(timelock)
+    * fixed order: `multi(platform,recovery,gordian)` or use `sortedmulti`?
+* Ed25519
+    * lots of compatibility problems
+    * different encodings of priv/pub
+    * different privatekey e.d. random, hash()
+    * different signature encodings
+    * [https://gist.github.com/gorazdko/5fbe819b80e780a1894086b5731bb32d](<https://gist.github.com/gorazdko/5fbe819b80e780a1894086b5731bb32d>)
+    * [Ristretto](<https://ristretto.group/ristretto.html>) solves the multisig problem (solves bitmarkd 2 sig transfer). Can use Schnorr with this
+* Price information where is it from, how to validate
+    * spotbit service
+    * fee estimation service
+* Transitions to higher-level Bitmark or self-soverign services.
+    * signal versus onion
+    * minimum necessary understanding of Tor for container communication
+    * what problems might Tor cause
+* Collaborative custodial key services held by Others (including Bitmark)
+    * Open registration
+    * How to choose between multiple vendors of these.
+* Policy coordinator
+    * (need new name for this other than coordinator as it is confusing)
+    * Helps you choose from different approaches
+* Multisig transaction coordinator
+    * need more understanding
+    * client support?
+    * Schnorr sig (0.22? Q3 perhaps) (0.21 regtest testnet?)
+    * will this increase message sizes too much
+* Invoicing and purchase orders
+* Sweep to new addresses under my own control
+    * not necessarily close the wallet
+* Fiat work on UX
+* Fees
+    * fees e.g., one dollar tx with N! dollar fee
+    * whathefee.io  fee estimator, but confusing, maybe 3x3 matrix. Better than fast/slow-low/high
+    * fee replacement, could UX have *add more fee button*
+* cpfp
+    * unconfirmed balance
+    * how to handle balance=0 e.g. unconfirmed balance in *change*
 
 ## Appendix
 
