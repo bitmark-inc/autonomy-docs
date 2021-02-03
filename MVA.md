@@ -69,6 +69,7 @@ tags: Autonomy-System, API, MVA
 * coinbase API - fee estimation
 * coingecko - historical price
 * OneSignal - generic push notications
+* Apple App Store: check subscription info
 
 ## Postman Documentation
 
@@ -182,6 +183,13 @@ Register account involves the following
 ### NewAddress
 ![NewAddress](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/NewAddress.png> "NewAddress")
 
+**Description**
+
+* obtain a new address to receive funds
+* should not be called unless the previous addresses are already have funds
+* for privacy an address should only be used once
+* for compatibility no more than 20 addresses can be outstanding, waiting for funds
+* bitcoind 0.21 can handle 1000  outstanding addresses, but using this feature would break compatibility
 ---
 
 ### Payment
@@ -193,6 +201,21 @@ Register account involves the following
 ![ReceiveFunds](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ReceiveFunds.png> "ReceiveFunds")
 
 ---
+
+### CheckRecoveryIntegrity
+![CheckRecoveryIntegrity](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CheckRecoveryIntegrity.png> "CheckRecoveryIntegrity")
+
+**Description**
+
+* periodically preform recovery integrity check
+    * Bitmark Deck exists
+    * Contact Deck exists
+    * Platform Deck exists
+* if sufficient items exist just update backup timestamps
+* if no redundancy send alert message
+    * _read back recovery key and reshard might be an option_
+* if recovery impossible request immediate action
+    * sweep wallet _can existing platform/gordian be used with new recovery?_
 
 ### RecoverAndSweepToNew
 ![RecoverAndSweepToNew](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RecoverAndSweepToNew.png> "RecoverAndSweepToNew")
@@ -268,8 +291,14 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to persist 
 * All `Signal*` store signal messaging's related information and required stores from signal protocol.
 
 ## Metadata
-
-*TODO: Need to define our metadata.*
+* Application database:
+    * Contacts
+    * Activities (payment notes, tx price, ...)
+    * Personal vCard
+    * Setting
+* Wallet information:
+    * Account maps -- For recovery verification
+    * Birthdate -- For sweeping
 
 ## Future Work (post-MVA)
 
@@ -335,14 +364,16 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to persist 
 
 ## Appendix
 
-### Container-AWS-Keys
-![Container-AWS-Keys](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Container-AWS-Keys.png> "Container-AWS-Keys")
+### ContainerKeyProvisioning
+![ContainerKeyProvisioning](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ContainerKeyProvisioning.png> "ContainerKeyProvisioning")
 
 **Description**
 
 * current provisioning for container
 * shows encryption key fo NAS storage of wallet files
 
+**Reference**
+- https://hackmd.io/Imu_ROdNQx-JL_W73R4JvQ
 
 ## Questions (Probably old and needs refactoring)
 
