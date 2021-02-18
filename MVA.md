@@ -57,11 +57,17 @@ tags: Autonomy-System, API, MVA
 * only necessary if:
     * platform store lost
     * container store lost
+    * recovery key lost (i.e., less than m shards available)
     * reason to suspect a key was leaked (e.g., stolen device)
 * need to get back two shards to rebuild recovery keypair
 * then use the remaining key platform or gordian to sweeep the funds to a new wallet
 * extra second protection is to add an additional key wit on year time lock
     * if recovery key is used then the case of bot platform and container store lost is covered if sufficient shards are recovered
+    * transaction byte code allows UTXO spend for one of:
+        * 2of3 multisig
+        * single sig of extra key AND blockheight > limit
+    * the _limit_ values will be set as the expected blockheight one year later
+
 
 ## Connections to other services
 
@@ -94,9 +100,7 @@ tags: Autonomy-System, API, MVA
     * assumes no compromise
 
 * Add Contact:
-    * User coordinator server?
-    * Understand QR as bearer token
-    * contact list also in container
+    * Do simplified flow at the moment.
 
 
 * **Diagram Fixes**
@@ -109,9 +113,29 @@ tags: Autonomy-System, API, MVA
         * need to have unencrypted contact info (perhaps only a name)
         * **need to check sequence diagram, possible update required**
 
+### Help needed from Blockchain Commons:
+* Authentication keypair
+    * how to derive various identifiers?
+    * where are the shards of the auth keypair stored?
+* TorGap
+    * drop-in solution
+    * can this replace the message server?
+    * will whisper over Tor be used?
+* check the recovery sequence
+    * also relates to recovering auth key to reconnect to container
+    * are all conditions covered
+
 
 ## Block Diagrams
 
+### System Architecture Overview
+![SystemArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/SystemAchitecture.png> "SystemArchitecture")
+
+**Description**
+
+* overview of the system structure
+* shows additional services as individual messaging clients
+* shows client side storage as repliacted to its platform provider's cloud
 
 ### Container Architecture
 ![ContainerArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/ContainerArchitecture.png> "ContainerArchitecture")
@@ -165,6 +189,12 @@ Register account involves the following
     * start bitcoind connected to selected network (test/main)
     * indicate status: running (need to detect bitcoind is in sync)
 * APP can contact the container to request actions
+
+:::warning
+Future Feature - registration with five decks
+
+![RegistrationFiveDecks](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RegistrationFiveDecks.png> "RegistrationFiveDecks")
+:::
 
 ---
 
@@ -228,10 +258,29 @@ Register account involves the following
 * group resulting UTXOs into transactions and ask APP to sign them
 * container countersign, finalise and broadcast
 
+:::warning
+Future Feature - recovery from five decks
+
+![RecoverFiveDecks](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RecoverFiveDecks.png> "ReecoverFiveDecks")
+
+:::
+
 ---
 
+### AutonomyContact
+:::info
+Current Simplified Feature
+
+![AutonomyContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/AutonomyContact.png> "AutonomyContact")
+:::
+
 ### AddContact
+
+:::warning
+Future Feature
+
 ![AddContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/AddContact.png> "AddContact")
+:::
 
 ---
 
@@ -244,9 +293,9 @@ Register account involves the following
 
 :::warning
 Future Feature
-:::
 
 ![CreateSharedAccount](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CreateSharedAccount.png> "CreateSharedAccount")
+:::
 
 ---
 
@@ -378,6 +427,8 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to persist 
 ## Questions (Probably old and needs refactoring)
 
 * Application UI and Push notifications are using open source / third party services. Is changing these items to use Platform default ones a goal of MVA?
+
+* Is that safe to derive Signal and Tor's private keys from a HDKey?
 
 * Where are the keys?
     * shard 1: user's device + cloud
