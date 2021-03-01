@@ -34,12 +34,10 @@ tags: Autonomy-System, API, MVA
             * contact store
     * gordian cosigner keypair
         * generated and kept in the container
-* identitity keypair
+* auth keypair
     * created on device
     * sharded like recovery key
-    * generate: Bitmark Customer account identifier
-    * generate: messaging identifier(s)
-    * generate: Tor keypair and certificate
+    * [encoding](#Appendix-Identification-Encoding)
 
 ### Reconstruction
 
@@ -322,22 +320,26 @@ Under Construction
 
 ![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
 
-### 2. Account/Keys management
-
+### 2. Account/Keys management (in keys storage)
 * Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compabilities with Gordian System.
 * Recovery and platform cosigner keypairs are generated independently from Application's process.
     * Recovery cosigner keypair will be sharded immediately after generated, and its key storage will just store shards.
     * Platform cosigner keypair keeps its privatekey separated from Application, only receive PSBTs and sign them.
-    * Signal protocol's account identity is derived from Platform cosigner keypair. Recovery won't recover signal identity.
-* Identity keypair are generated in Application process.
+* Auth keypair are generated in Application process and used for Signal protocol messaging's identity.
     * After generated, its 3 shards will be stored along with Recovery cosigner keypair's shards.
 
-### 3. Local database
+### 3. Application database (in file storage)
+Uses [Core data](https://developer.apple.com/documentation/coredata) to store application business data, includes:
+* `Contacts`: Contact lists and their vCards
+* `Activities`: User activities: set up and recover account, deposits, payments,...
+* `Settings`: User's application settings and prefererences.
+* `Personal vCard`: Users' contact information.
 
-Uses [Core data](https://developer.apple.com/documentation/coredata) to persist all kinds of data not related to keys, includes:
-* `Address` stores multisig BTC addresses and their derivation paths.
-* `Activity`, `Contact` and `Settings` store business logic data of activities, contacts and app settings.
-* All `Signal*` store signal messaging's related information and required stores from signal protocol.
+The application stores latest snapshot of current database to Cloud storage as files.
+
+TODO: 
+- Send another copy of snapshot to the Container.
+- Encrypt the snapshots.
 
 ## Metadata
 * Application database:
@@ -368,12 +370,9 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to persist 
     * currently - Bitmark-run central whisper message queue
     * Signal messaging is currenly only sihgle-sig, with all its disadvantages.
     * messaging uses a key as an identifier. How do we restore or recover or revoke without real decentralized identifier rotation features.
-* 2of3 (keys and shards)
-    * BTC 2of3
-    * joint account A & B each are 2of3
-    * shard of recovery/identity is 2of3 or 3of5 or 4of9
+* [Key bootstrapping](https://docs.google.com/document/d/1n9zuL5KwlvrEGUz6Vy4gbigE0p9B0VRHyPrTT2h8Gy4/edit)
     * BTC 2of3 +1(timelock: one year) so the fund is single sig after one year. TRADEOFF: make recovery key as the +1(timelock)
-    * fixed order: `multi(platform,recovery,gordian)` or use `sortedmulti`?
+    
 * Ed25519
     * lots of compatibility problems
     * different encodings of priv/pub
@@ -407,11 +406,50 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to persist 
     * fees e.g., one dollar tx with N! dollar fee
     * whathefee.io  fee estimator, but confusing, maybe 3x3 matrix. Better than fast/slow-low/high
     * fee replacement, could UX have *add more fee button*
-* cpfp
+* Child pays for parent (cpfp)
     * unconfirmed balance
     * how to handle balance=0 e.g. unconfirmed balance in *change*
 
-## Appendix
+
+## Appendix: Identification Encoding
+
+The original choice was did:key: using secpk1 however there is a problem with client
+side signatures.
+
+Choices:
+
+1. use did:key but only secp256k1 and get help to add required signature function to iOS wrapper for the exists in libwally. This would be the preferred method (as this curve seems to be more secure)
+2. ~~use did:autonomy for P-256 which would be similar to did:key encoding, but replace the 01 byte prefix with 04 and double check that OpenSSL can generate compatible public keys from the same private key~~
+
+The secp256k1 compressed forms showiung the 33 byte public key with 02/03 prefix:
+~~~
+% openssl ecparam -name secp256k1 -genkey -out tk.pem ; openssl ec -in tk.pem -conv_form compressed -noout -text
+read EC key
+Private-Key: (256 bit)
+priv:
+    17:0a:4b:c1:c5:4e:52:86:f0:4f:57:51:6f:03:b4:
+    61:76:da:38:23:00:41:1d:84:3d:e9:7e:5b:5d:0a:
+    63:1a
+pub:
+    02:5c:d8:12:dd:75:55:28:91:18:1f:a1:68:f3:94:
+    ea:20:fb:c0:47:ee:31:f9:fd:bf:8f:27:e1:a9:e0:
+    2c:a3:d8
+ASN1 OID: secp256k1
+
+% openssl ecparam -name secp256k1 -genkey -out tk.pem ; openssl ec -in tk.pem -conv_form compressed -noout -text
+read EC key
+Private-Key: (256 bit)
+priv:
+    0b:ae:48:1d:a3:dc:88:50:81:30:26:4a:88:bc:f0:
+    34:a4:1b:2e:8a:a0:92:01:ad:7c:37:e1:7e:99:20:
+    f7:e7
+pub:
+    03:a2:6e:c8:7a:0b:ee:99:04:5a:3c:01:c3:d1:93:
+    c7:e2:8c:4f:ba:7a:92:0f:23:91:63:1b:46:c2:e5:
+    29:12:0a
+ASN1 OID: secp256k1
+~~~
+
 
 ### ContainerKeyProvisioning
 ![ContainerKeyProvisioning](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ContainerKeyProvisioning.png> "ContainerKeyProvisioning")
