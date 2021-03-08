@@ -3,9 +3,9 @@ author: hsw
 tags: Autonomy-System, API, MVA
 ---
 
-# **Autonomy Minimum Viable Architecture (MVA)**
+# **Autonomy Architecture v1.0**
 
-**v1.0 Release Date: 2-MAR 2021**
+**Release Date: 2-MAR 2021**
 - App
     - iOS (iPhone only)
 - Server (partially isolated user processes)
@@ -100,16 +100,6 @@ tags: Autonomy-System, API, MVA
 * Add Contact:
     * Do simplified flow at the moment.
 
-
-* **Diagram Fixes**
-    * only delete device shards when backup is complete
-    * balance>B or activity>A or elapsed>T ask for backup
-    * how to reconstruct Bitmark relationship
-        * currently via email
-        * simple OTP
-        * get back Bitmark Deck
-        * need to have unencrypted contact info (perhaps only a name)
-        * **need to check sequence diagram, possible update required**
 
 ### Help needed from Blockchain Commons:
 * Authentication keypair
@@ -402,6 +392,7 @@ TODO:
 * Sweep to new addresses under my own control
     * not necessarily close the wallet
 * Fiat work on UX
+* iOS app's SwiftUI
 * Fees
     * fees e.g., one dollar tx with N! dollar fee
     * whathefee.io  fee estimator, but confusing, maybe 3x3 matrix. Better than fast/slow-low/high
@@ -418,7 +409,7 @@ side signatures.
 
 Choices:
 
-1. use did:key but only secp256k1 and get help to add required signature function to iOS wrapper for the exists in libwally. This would be the preferred method (as this curve seems to be more secure)
+1. use did:key but only secp256k1 and get help to add required signature function to iOS wrapper for a secp256k1 C library. This would be the preferred method (as this curve seems to be more secure)
 2. ~~use did:autonomy for P-256 which would be similar to did:key encoding, but replace the 01 byte prefix with 04 and double check that OpenSSL can generate compatible public keys from the same private key~~
 
 The secp256k1 compressed forms showiung the 33 byte public key with 02/03 prefix:
@@ -450,6 +441,7 @@ pub:
 ASN1 OID: secp256k1
 ~~~
 
+Test cases: https://github.com/BlockchainCommons/musig-cli/blob/master/tests/cli.rs
 
 ### ContainerKeyProvisioning
 ![ContainerKeyProvisioning](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ContainerKeyProvisioning.png> "ContainerKeyProvisioning")
@@ -463,10 +455,6 @@ ASN1 OID: secp256k1
 - https://hackmd.io/Imu_ROdNQx-JL_W73R4JvQ
 
 ## Questions (Probably old and needs refactoring)
-
-* Application UI and Push notifications are using open source / third party services. Is changing these items to use Platform default ones a goal of MVA?
-
-* Is that safe to derive Signal and Tor's private keys from a HDKey?
 
 * Where are the keys?
     * shard 1: user's device + cloud
