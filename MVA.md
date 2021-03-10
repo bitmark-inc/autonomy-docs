@@ -5,7 +5,7 @@ tags: Autonomy-System, API, MVA
 
 # **Autonomy Architecture v1.0**
 
-**Release Date: 2-MAR 2021**
+**Release Date: 5-MAR 2021**
 - App
     - iOS (iPhone only)
 - Server (partially isolated user processes)
@@ -404,13 +404,9 @@ TODO:
 
 ## Appendix: Identification Encoding
 
-The original choice was did:key: using secpk1 however there is a problem with client
-side signatures.
+ use did:key but only secp256k1 and get help to add required signature function to iOS wrapper for a secp256k1 C library. This would be the preferred method (as this curve seems to be more secure)
 
-Choices:
-
-1. use did:key but only secp256k1 and get help to add required signature function to iOS wrapper for a secp256k1 C library. This would be the preferred method (as this curve seems to be more secure)
-2. ~~use did:autonomy for P-256 which would be similar to did:key encoding, but replace the 01 byte prefix with 04 and double check that OpenSSL can generate compatible public keys from the same private key~~
+**Example:**
 
 The secp256k1 compressed forms showiung the 33 byte public key with 02/03 prefix:
 ~~~
