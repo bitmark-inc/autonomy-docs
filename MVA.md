@@ -58,9 +58,9 @@ tags: Autonomy-System, API, MVA
     * recovery key lost (i.e., less than m shards available)
     * reason to suspect a key was leaked (e.g., stolen device)
 * need to get back two shards to rebuild recovery keypair
-* then use the remaining key platform or gordian to sweeep the funds to a new wallet
-* extra second protection is to add an additional key wit on year time lock
-    * if recovery key is used then the case of bot platform and container store lost is covered if sufficient shards are recovered
+* then use the remaining key platform or gordian to sweep the funds to a new wallet
+* extra second protection is to add an additional key with one year time lock
+    * if recovery key is used then the case of both platform and container store lost is covered if sufficient shards are recovered
     * transaction byte code allows UTXO spend for one of:
         * 2of3 multisig
         * single sig of extra key AND blockheight > limit
@@ -123,7 +123,7 @@ tags: Autonomy-System, API, MVA
 
 * overview of the system structure
 * shows additional services as individual messaging clients
-* shows client side storage as repliacted to its platform provider's cloud
+* shows client side storage as replicated to its platform provider's cloud
 
 ### Container Architecture
 ![ContainerArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/ContainerArchitecture.png> "ContainerArchitecture")
@@ -142,14 +142,14 @@ The system consists of the following components:
     * Reboot container to switch networks (possibly this can be an in-container process instead)
 * Messaging
     * uses whisper protocol to perform end-to-end encrypted messaging between client APPs
-    * server store E2EE messages in a queue for later retieval (so continuous connections are not necessary)
+    * server store E2EE messages in a queue for later retrieval (so continuous connections are not necessary)
     * client must keep a key store and a session store
 * Notification Relay to forward push notifications
 * Container
     * bitcoind either testnet or mainnet, but *not* both
     * wallet changes trigger notifier
     * encrypted image mount for wallet files (key from etcd)
-    * union blockchain mount to share large blockchain datafiles
+    * union blockchain mount to share large blockchain data files
     * (deduplication either on container reboot or internal union deduplication) (not sure when this would trigger)
 
 ---
@@ -311,7 +311,7 @@ Under Construction
 ![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
 
 ### 2. Account/Keys management (in keys storage)
-* Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compabilities with Gordian System.
+* Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compatibility with Gordian System.
 * Recovery and platform cosigner keypairs are generated independently from Application's process.
     * Recovery cosigner keypair will be sharded immediately after generated, and its key storage will just store shards.
     * Platform cosigner keypair keeps its privatekey separated from Application, only receive PSBTs and sign them.
@@ -322,7 +322,7 @@ Under Construction
 Uses [Core data](https://developer.apple.com/documentation/coredata) to store application business data, includes:
 * `Contacts`: Contact lists and their vCards
 * `Activities`: User activities: set up and recover account, deposits, payments,...
-* `Settings`: User's application settings and prefererences.
+* `Settings`: User's application settings and preferences.
 * `Personal vCard`: Users' contact information.
 
 The application stores latest snapshot of current database to Cloud storage as files.
@@ -347,17 +347,17 @@ It also stores an encrypted version of latest snapshot of current database to th
     * make sure that the strings are zeroed out
     * strings are variable size and need careful consideration
     * what for string copies
-    * maybe 2 mandays of high-level Java expert
+    * maybe 2 man days of high-level Java expert
 * Recover
     * RECOVERY - compromise of one key is assumed, thus use remaining keys to sweep to new Account Map multisig.
     * recover from loss of application or loss of container
-    * recover old funds to new account (forma)
+    * recover old funds to new account
     * retain old wallet files for bitcoind monitoring
     * _future:_ "crontab" to periodically sweep any new funds to old wallet
     * _option:_ display remaining two keys as QR for external recovery
 * Messaging
     * currently - Bitmark-run central whisper message queue
-    * Signal messaging is currenly only sihgle-sig, with all its disadvantages.
+    * Signal messaging is currently only single-sig, with all its disadvantages.
     * messaging uses a key as an identifier. How do we restore or recover or revoke without real decentralized identifier rotation features.
 * [Key bootstrapping](https://docs.google.com/document/d/1n9zuL5KwlvrEGUz6Vy4gbigE0p9B0VRHyPrTT2h8Gy4/edit)
     * BTC 2of3 +1(timelock: one year) so the fund is single sig after one year. TRADEOFF: make recovery key as the +1(timelock)
@@ -372,7 +372,7 @@ It also stores an encrypted version of latest snapshot of current database to th
 * Price information where is it from, how to validate
     * spotbit service
     * fee estimation service
-* Transitions to higher-level Bitmark or self-soverign services.
+* Transitions to higher-level Bitmark or self-sovereign services.
     * signal versus onion
     * minimum necessary understanding of Tor for container communication
     * what problems might Tor cause
@@ -407,7 +407,7 @@ It also stores an encrypted version of latest snapshot of current database to th
 
 **Example:**
 
-The secp256k1 compressed forms showiung the 33 byte public key with 02/03 prefix:
+The secp256k1 compressed forms showing the 33 byte public key with 02/03 prefix:
 ~~~
 % openssl ecparam -name secp256k1 -genkey -out tk.pem ; openssl ec -in tk.pem -conv_form compressed -noout -text
 read EC key
@@ -444,7 +444,7 @@ Test cases: https://github.com/BlockchainCommons/musig-cli/blob/master/tests/cli
 **Description**
 
 * current provisioning for container
-* shows encryption key fo NAS storage of wallet files
+* shows encryption key for NAS storage of wallet files
 
 **Reference**
 - https://hackmd.io/Imu_ROdNQx-JL_W73R4JvQ
@@ -466,10 +466,10 @@ Test cases: https://github.com/BlockchainCommons/musig-cli/blob/master/tests/cli
     * Bitmark shard uses emailed code
     * Wallet sweep and reseed not available yet (second device and create new account?)
     * reconstruction e.g. device failure, but nothing lost
-    * recovery - security risk so reconstruct may be harmful. This gets bak two of the 3 keys so a wallet sweep would be required
+    * recovery - security risk so reconstruct may be harmful. This gets back two of the 3 keys so a wallet sweep would be required
 * What are the endpoints?
     * iOS APP devices locked to some type of platform. subject to *recovery* dependent on the platform supplier
-    * Bitmark cluster initialion management, container provisioning etc.
+    * Bitmark cluster initialisation management, container provisioning etc.
     * User services
         * in app, in container, global bitmark provided services
         * connections to external entities (e.g., price feed)
