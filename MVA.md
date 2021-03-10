@@ -326,10 +326,7 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to store ap
 * `Personal vCard`: Users' contact information.
 
 The application stores latest snapshot of current database to Cloud storage as files.
-
-TODO: 
-- Send another copy of snapshot to the Container.
-- Encrypt the snapshots.
+It also stores an encrypted version of latest snapshot of current database to the container as redudant backup.
 
 ## Metadata
 * Application database:
@@ -340,6 +337,8 @@ TODO:
 * Wallet information:
     * Account maps -- For recovery verification
     * Birthdate -- For sweeping
+* Backup contact:
+    * Identity and alias (contact name).
 
 ## Future Work (post-MVA)
 
