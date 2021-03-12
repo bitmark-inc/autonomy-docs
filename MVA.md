@@ -276,8 +276,11 @@ Register account involves the following
 * Recovery and platform cosigner keypairs are generated independently from Application's process.
     * Recovery cosigner keypair will be sharded immediately after generated, and its key storage will just store shards.
     * Platform cosigner keypair keeps its privatekey separated from Application, only receive PSBTs and sign them.
-* Auth keypair are generated in Application process and used for Signal protocol messaging's identity.
+* Auth keypair are generated independently from Application's process and used for Signal protocol messaging's identity.
+    * Different keypair for each profile.
     * After generated, its 3 shards will be stored along with Recovery cosigner keypair's shards.
+    * Signal protocol's public identity uses DID:KEY format with a secp256k1 keypair derived from Auth keypair with path: `m/44'/731'/0'`.
+    * Signal protocol's **identity keypair** is generated / stored locally. When users change their devices (reconstruct / recovery), a new keypair will be generated and submited to signal protocol API server.
 
 ### 3. Application database (in file storage)
 Uses [Core data](https://developer.apple.com/documentation/coredata) to store application business data, includes:
