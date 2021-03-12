@@ -178,12 +178,6 @@ Register account involves the following
     * indicate status: running (need to detect bitcoind is in sync)
 * APP can contact the container to request actions
 
-:::warning
-Future Feature - registration with five decks
-
-![RegistrationFiveDecks](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RegistrationFiveDecks.png> "RegistrationFiveDecks")
-:::
-
 ---
 
 ### CreatePersonalAccount
@@ -246,29 +240,16 @@ Future Feature - registration with five decks
 * group resulting UTXOs into transactions and ask APP to sign them
 * container countersign, finalise and broadcast
 
-:::warning
-Future Feature - recovery from five decks
-
-![RecoverFiveDecks](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RecoverFiveDecks.png> "ReecoverFiveDecks")
-
-:::
-
 ---
 
 ### AutonomyContact
-:::info
-Current Simplified Feature
 
 ![AutonomyContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/AutonomyContact.png> "AutonomyContact")
-:::
 
-### AddContact
+**Description**
 
-:::warning
-Future Feature
-
-![AddContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/AddContact.png> "AddContact")
-:::
+* Add contact from invite
+* Reciprocal add of user to contact
 
 ---
 
@@ -277,32 +258,12 @@ Future Feature
 
 ---
 
-### CreateSharedAccount
-
-:::warning
-Future Feature
-
-![CreateSharedAccount](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CreateSharedAccount.png> "CreateSharedAccount")
-:::
-
----
-
 ## Classes
 
 ### SystemClasses
 ![SystemClasses](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/class/server/SystemClasses.png> "SystemClasses")
 
-
 ---
-
-## still to be updated
-
-:::warning
-Under Construction
-:::
-
----
-
 
 ## Application architecture
 
