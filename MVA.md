@@ -117,7 +117,7 @@ tags: Autonomy-System, API, MVA
 ## Block Diagrams
 
 ### System Architecture Overview
-![SystemArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/SystemAchitecture.png> "SystemArchitecture")
+![SystemArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/block/server/SystemAchitecture.png> "SystemArchitecture")
 
 **Description**
 
@@ -126,7 +126,7 @@ tags: Autonomy-System, API, MVA
 * shows client side storage as replicated to its platform provider's cloud
 
 ### Container Architecture
-![ContainerArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/ContainerArchitecture.png> "ContainerArchitecture")
+![ContainerArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/block/server/ContainerArchitecture.png> "ContainerArchitecture")
 
 **Description**
 
@@ -158,12 +158,12 @@ The system consists of the following components:
 ## Sequence Diagrams
 
 ### Overview
-![Overview](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Overview.png> "Overview")
+![Overview](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/Overview.png> "Overview")
 
 ---
 
 ### Registration
-![Registration](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Registration.png> "Registration")
+![Registration](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/Registration.png> "Registration")
 
 **Description**
 
@@ -181,7 +181,7 @@ Register account involves the following
 ---
 
 ### CreatePersonalAccount
-![CreatePersonalAccount](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CreatePersonalAccount.png> "CreatePersonalAccount")
+![CreatePersonalAccount](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/CreatePersonalAccount.png> "CreatePersonalAccount")
 
 **Description**
 
@@ -193,7 +193,7 @@ Register account involves the following
 * relies on saved accountmap to recover xpubs
 
 ### NewAddress
-![NewAddress](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/NewAddress.png> "NewAddress")
+![NewAddress](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/NewAddress.png> "NewAddress")
 
 **Description**
 
@@ -205,17 +205,17 @@ Register account involves the following
 ---
 
 ### Payment
-![Payment](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/Payment.png> "Payment")
+![Payment](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/Payment.png> "Payment")
 
 ---
 
 ### ReceiveFunds
-![ReceiveFunds](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ReceiveFunds.png> "ReceiveFunds")
+![ReceiveFunds](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/ReceiveFunds.png> "ReceiveFunds")
 
 ---
 
 ### CheckRecoveryIntegrity
-![CheckRecoveryIntegrity](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/CheckRecoveryIntegrity.png> "CheckRecoveryIntegrity")
+![CheckRecoveryIntegrity](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/CheckRecoveryIntegrity.png> "CheckRecoveryIntegrity")
 
 **Description**
 
@@ -230,7 +230,7 @@ Register account involves the following
     * sweep wallet _can existing platform/gordian be used with new recovery?_
 
 ### RecoverAndSweepToNew
-![RecoverAndSweepToNew](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/RecoverAndSweepToNew.png> "RecoverAndSweepToNew")
+![RecoverAndSweepToNew](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/RecoverAndSweepToNew.png> "RecoverAndSweepToNew")
 
 **Description**
 
@@ -244,7 +244,7 @@ Register account involves the following
 
 ### AutonomyContact
 
-![AutonomyContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/AutonomyContact.png> "AutonomyContact")
+![AutonomyContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/AutonomyContact.png> "AutonomyContact")
 
 **Description**
 
@@ -254,14 +254,14 @@ Register account involves the following
 ---
 
 ### BackupToContact
-![BackupToContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/BackupToContact.png> "BackupToContact")
+![BackupToContact](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/BackupToContact.png> "BackupToContact")
 
 ---
 
 ## Classes
 
 ### SystemClasses
-![SystemClasses](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/class/server/SystemClasses.png> "SystemClasses")
+![SystemClasses](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/class/server/SystemClasses.png> "SystemClasses")
 
 ---
 
@@ -269,7 +269,7 @@ Register account involves the following
 
 ### 1. Block diagrams
 
-![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
+![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
 
 ### 2. Account/Keys management (in keys storage)
 * Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compatibility with Gordian System.
