@@ -3,13 +3,15 @@ author: hsw
 tags: Autonomy-System, API, MVA
 ---
 
-# **Autonomy Architecture v1.0**
+# **Autonomy Architecture v2.0**
 
-**Release Date: 5-MAR 2021**
+**Release Date: 2021-AA-BB**
 - App
-    - iOS (iPhone only)
+    - iOS
+    - Android
 - Server (partially isolated user processes)
-    - Basic transaction coordinator
+    - Transaction coordinator
+    - Inter Container messaging
     - Recovery
     - Contact list
 
