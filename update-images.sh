@@ -1,11 +1,16 @@
 #!/bin/sh
 # scan images and check for any updates
 
+branch="$(git branch --show-current)"
+
 # in Visual Pardigm, export all diagrams to: "${incoming}"
-incoming='VPProjects'
+incoming="VPProjects/${branch}"
 outgoing='images'
 
+# option command to fetch images from remote VP host
+sync_cmd='sync_vp_images'
 
+# error handling
 ERROR() {
   printf 'error: '
   printf "${@}"
@@ -21,6 +26,7 @@ do
   [ -x "${f}" ] || ERROR 'cannot find program: %s' "${p}"
 done
 
+[ -x "${sync_cmd}" ] && ./"${sync_cmd}" "${branch}" "${incoming}"
 
 awk -v incoming="${incoming}" -v outgoing="${outgoing}" '
 
