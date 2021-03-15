@@ -403,7 +403,7 @@ ASN1 OID: secp256k1
 Test cases: https://github.com/BlockchainCommons/musig-cli/blob/master/tests/cli.rs
 
 ### ContainerKeyProvisioning
-![ContainerKeyProvisioning](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ContainerKeyProvisioning.png> "ContainerKeyProvisioning")
+![ContainerKeyProvisioning](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/sequence/server/ContainerKeyProvisioning.png> "ContainerKeyProvisioning")
 
 **Description**
 
