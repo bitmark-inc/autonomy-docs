@@ -272,15 +272,32 @@ Register account involves the following
 ![ApplicationArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/block/application/ApplicationArchitecture.png> "ApplicationArchitecture")
 
 ### 2. Account/Keys management (in keys storage)
-* Use parts of [latest module from Gordian Cosigner](https://github.com/BlockchainCommons/GordianCosigner-Catalyst/tree/master/GordianSigner/Helpers) to generate seed and required keys to ensure compatibility with Gordian System.
-* Recovery and platform cosigner keypairs are generated independently from Application's process.
-    * Recovery cosigner keypair will be sharded immediately after generated, and its key storage will just store shards.
+* Recovery cosigner keypair:
+    * secp256k1
+    * Isn't stored on local keychain.
+    * Is sharded immediately after generated.
+    * One shard is stored on cloud keychain.
+    * The remain shards are sent to:
+        * Bitmark shard server
+        * Backup contacts
+* Platform cosigner keypair:
+    * secp256k1
+    * Is stored on cloud keychain.
     * Platform cosigner keypair keeps its privatekey separated from Application, only receive PSBTs and sign them.
-* Auth keypair are generated independently from Application's process and used for Signal protocol messaging's identity.
-    * Different keypair for each profile.
-    * After generated, its 3 shards will be stored along with Recovery cosigner keypair's shards.
-    * Signal protocol's public identity uses DID:KEY format with a secp256k1 keypair derived from Auth keypair with path: `m/44'/731'/0'`.
-    * Signal protocol's **identity keypair** is generated / stored locally. When users change their devices (reconstruct / recovery), a new keypair will be generated and submited to signal protocol API server.
+* Auth keypair:
+    * secp256k1
+    * Is stored on local keychain.
+    * Is sharded immediately after generated.
+    * One shard is stored on cloud keychain
+    * The remain shards are sent to:
+        * Bitmark shard server
+        * Backup contacts
+    * Different auth keypair for each profile.
+    * Profile's identity uses DID:KEY format with a derivation from Auth keypair with path: `m/44'/731'/0'`.
+* Signal identity keypair:
+    * X25519 (https://signal.org/docs/)
+    * Is generated and stored on local keychain.
+    * When users change their devices (reconstruct / recovery), a new keypair will be generated and submited to signal protocol API server.
 
 ### 3. Application database (in file storage)
 Uses [Core data](https://developer.apple.com/documentation/coredata) to store application business data, includes:
