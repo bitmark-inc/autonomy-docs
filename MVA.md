@@ -11,7 +11,7 @@ tags: Autonomy-System, API, MVA
     - Android
 - Server (partially isolated user processes)
     - Transaction coordinator
-    - Inter Container messaging
+    - Inter Pod messaging
     - Recovery
     - Contact list
 
@@ -35,7 +35,7 @@ tags: Autonomy-System, API, MVA
             * Bitmark store
             * contact store
     * gordian cosigner keypair
-        * generated and kept in the container
+        * generated and kept in the Pod
 * auth keypair
     * created on device
     * sharded like recovery key
@@ -45,7 +45,7 @@ tags: Autonomy-System, API, MVA
 
 * APP - reload from:
     * platform store
-* Container - rebuild from:
+* Pod - rebuild from:
     * encrypted store containing:
         * gordian co-signer keypair
         * wallet file(s) (rebuild this from keypair+account maps if `wallet.dat` damaged)
@@ -56,13 +56,13 @@ tags: Autonomy-System, API, MVA
 
 * only necessary if:
     * platform store lost
-    * container store lost
+    * Pod store lost
     * recovery key lost (i.e., less than m shards available)
     * reason to suspect a key was leaked (e.g., stolen device)
 * need to get back two shards to rebuild recovery keypair
 * then use the remaining key platform or gordian to sweep the funds to a new wallet
 * extra second protection is to add an additional key with one year time lock
-    * if recovery key is used then the case of both platform and container store lost is covered if sufficient shards are recovered
+    * if recovery key is used then the case of both platform and Pod store lost is covered if sufficient shards are recovered
     * transaction byte code allows UTXO spend for one of:
         * 2of3 multisig
         * single sig of extra key AND blockheight > limit
@@ -88,7 +88,7 @@ tags: Autonomy-System, API, MVA
     2. use: `sortedmulti` - this may simplify recovery
 
 * Network Switching
-    * provisioning: one keypair file and both networks derived from it
+    * provisioning: two separated keypairs
     * figure out startup sequence: 2× CreatePersonalAccount for test/main
     * wallet files multiple per network
     * API for APP to reboot to other network
@@ -96,7 +96,7 @@ tags: Autonomy-System, API, MVA
     * RESEARCH: Need to add to gordian server and all-bitcoin-core 21+ to regtest and signet, signet schnorr ($10K changes to server, $5K changes to wallet to support 3+ networks, and $20K for initial schnorr)
 
 * Reconstruct
-    * get old keys back: platform and container still usable
+    * get old keys back: platform and Pod still usable
     * assumes no compromise
 
 * Add Contact:
@@ -112,7 +112,7 @@ tags: Autonomy-System, API, MVA
     * can this replace the message server?
     * will whisper over Tor be used?
 * check the recovery sequence
-    * also relates to recovering auth key to reconnect to container
+    * also relates to recovering auth key to reconnect to Pod
     * are all conditions covered
 
 
@@ -127,32 +127,32 @@ tags: Autonomy-System, API, MVA
 * shows additional services as individual messaging clients
 * shows client side storage as replicated to its platform provider's cloud
 
-### Container Architecture
-![ContainerArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/ContainerArchitecture.png> "ContainerArchitecture")
+### Pod Architecture
+![PodArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/block/server/PodArchitecture.png> "PodArchitecture")
 
 **Description**
 
 The system consists of the following components:
 * API handler - this handles the HTTPS interface from the APP and has a number of functions
     * Handle some functions directly such as calls to external APIs (e.g., transaction cost)
-    * Proxy connections to user's container
+    * Proxy connections to user's Pod
     * E2EE messaging between applications
-* Container manager this performs:
-    * Initial container instantiation
-    * Container update - new program version
-    * Container compaction - compact the local blockchain files (possibly this can be an in-container process instead)
-    * Reboot container to switch networks (possibly this can be an in-container process instead)
+* Pod manager this performs:
+    * Initial Pod instantiation
+    * Pod update - new program version
+    * Pod compaction - compact the local blockchain files (possibly this can be an in-Pod process instead)
+    * Reboot Pod to switch networks (possibly this can be an in-Pod process instead)
 * Messaging
     * uses whisper protocol to perform end-to-end encrypted messaging between client APPs
     * server store E2EE messages in a queue for later retrieval (so continuous connections are not necessary)
     * client must keep a key store and a session store
 * Notification Relay to forward push notifications
-* Container
+* Pod
     * bitcoind either testnet or mainnet, but *not* both
     * wallet changes trigger notifier
     * encrypted image mount for wallet files (key from etcd)
     * union blockchain mount to share large blockchain data files
-    * (deduplication either on container reboot or internal union deduplication) (not sure when this would trigger)
+    * (deduplication either on Pod reboot or internal union deduplication) (not sure when this would trigger)
 
 ---
 
@@ -171,14 +171,14 @@ The system consists of the following components:
 
 Register account involves the following
 * Creation of account in DB
-* Container instantiation (on boot actions)
+* Pod instantiation (on boot actions)
     * start internal process to gather entropy (does this need APP?)
     * derive xpriv (accumulated entropy)
     * indicate status: initialised
     * mount wallets and blockchain
     * start bitcoind connected to selected network (test/main)
     * indicate status: running (need to detect bitcoind is in sync)
-* APP can contact the container to request actions
+* APP can contact the Pod to request actions
 
 :::warning
 Future Feature - registration with five decks
@@ -243,10 +243,10 @@ Future Feature - registration with five decks
 **Description**
 
 * obtain recovery keypair and recover the old account map from 2 Decks
-* setup APP/container with one keypair each
-* have container iterate over UTXOs
+* setup APP/Pod with one keypair each
+* have Pod iterate over UTXOs
 * group resulting UTXOs into transactions and ask APP to sign them
-* container countersign, finalise and broadcast
+* Pod countersign, finalise and broadcast
 
 :::warning
 Future Feature - recovery from five decks
@@ -328,7 +328,7 @@ Uses [Core data](https://developer.apple.com/documentation/coredata) to store ap
 * `Personal vCard`: Users' contact information.
 
 The application stores latest snapshot of current database to Cloud storage as files.
-It also stores an encrypted version of latest snapshot of current database to the container as redudant backup.
+It also stores an encrypted version of latest snapshot of current database to the Pod as redudant backup.
 
 ## Metadata
 * Application database:
@@ -352,7 +352,7 @@ It also stores an encrypted version of latest snapshot of current database to th
     * maybe 2 man days of high-level Java expert
 * Recover
     * RECOVERY - compromise of one key is assumed, thus use remaining keys to sweep to new Account Map multisig.
-    * recover from loss of application or loss of container
+    * recover from loss of application or loss of Pod
     * recover old funds to new account
     * retain old wallet files for bitcoind monitoring
     * _future:_ "crontab" to periodically sweep any new funds to old wallet
@@ -376,7 +376,7 @@ It also stores an encrypted version of latest snapshot of current database to th
     * fee estimation service
 * Transitions to higher-level Bitmark or self-sovereign services.
     * signal versus onion
-    * minimum necessary understanding of Tor for container communication
+    * minimum necessary understanding of Tor for Pod communication
     * what problems might Tor cause
 * Collaborative custodial key services held by Others (including Bitmark)
     * Open registration
@@ -440,12 +440,12 @@ ASN1 OID: secp256k1
 
 Test cases: https://github.com/BlockchainCommons/musig-cli/blob/master/tests/cli.rs
 
-### ContainerKeyProvisioning
-![ContainerKeyProvisioning](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/ContainerKeyProvisioning.png> "ContainerKeyProvisioning")
+### PodKeyProvisioning
+![PodKeyProvisioning](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/main/images/sequence/server/PodKeyProvisioning.png> "PodKeyProvisioning")
 
 **Description**
 
-* current provisioning for container
+* current provisioning for Pod
 * shows encryption key for NAS storage of wallet files
 
 **Reference**
@@ -459,7 +459,7 @@ Test cases: https://github.com/BlockchainCommons/musig-cli/blob/master/tests/cli
     * shard 2: contact's device + cloud
     * shard 3: Bitmark shard server (and its backups)
     * User xprv on user's device (internal secure store)
-    * Container xprv in container storage (etcd key for at rest encryption of file store)
+    * Pod xprv in Pod storage (etcd key for at rest encryption of file store)
     * also note shards and decks (array of shards + *some data*)
     * 3 BTC keypair only recovery is sharded
     * identity keypair also sharded
@@ -471,17 +471,17 @@ Test cases: https://github.com/BlockchainCommons/musig-cli/blob/master/tests/cli
     * recovery - security risk so reconstruct may be harmful. This gets back two of the 3 keys so a wallet sweep would be required
 * What are the endpoints?
     * iOS APP devices locked to some type of platform. subject to *recovery* dependent on the platform supplier
-    * Bitmark cluster initialisation management, container provisioning etc.
+    * Bitmark cluster initialisation management, Pod provisioning etc.
     * User services
-        * in app, in container, global bitmark provided services
+        * in app, in Pod, global bitmark provided services
         * connections to external entities (e.g., price feed)
-        * container/app are updated by Bitmark network
+        * Pod/app are updated by Bitmark network
         * cosigner signer services e.g. may require multiple human signers to approve
     * messaging protocol handles (versus pointers)
 * What are the communication protocol between endpoints?
     * HTTPS only for API
     * E2EE (whisper protocol) over HTTPS for APP→APP messaging
-    * HTTPS for APP→Container
+    * HTTPS for APP→Pod
         * future Tor with certificate authentication
         * would like distributed whisper over Tor
 
