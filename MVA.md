@@ -117,7 +117,7 @@ tags: Autonomy-System, API, MVA
 ## Block Diagrams
 
 ### System Architecture Overview
-![SystemArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/block/server/SystemAchitecture.png> "SystemArchitecture")
+![SystemArchitecture](<https://raw.githubusercontent.com/bitmark-inc/autonomy-docs/v1.x/images/block/server/SystemArchitecture.png> "SystemArchitecture")
 
 **Description**
 
